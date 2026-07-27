@@ -84,15 +84,31 @@ document.addEventListener(
 
     if (savedUserId) {
 
-      document.getElementById(
-        "userId"
-      ).value =
-        savedUserId;
+      const userIdInput =
+        document.getElementById(
+          "userId"
+        );
 
-      document.getElementById(
-        "rememberMe"
-      ).checked =
-        true;
+      const rememberMe =
+        document.getElementById(
+          "rememberMe"
+        );
+
+
+      if (userIdInput) {
+
+        userIdInput.value =
+          savedUserId;
+
+      }
+
+
+      if (rememberMe) {
+
+        rememberMe.checked =
+          true;
+
+      }
 
     }
 
@@ -113,17 +129,29 @@ function togglePassword() {
     );
 
 
+  if (!password) {
+
+    return;
+
+  }
+
+
   password.type =
     password.type === "password"
+
       ? "text"
+
       : "password";
 
 }
 
 
 function toggleUpdatePassword(
+
   inputId,
+
   element
+
 ) {
 
   const input =
@@ -132,9 +160,18 @@ function toggleUpdatePassword(
     );
 
 
+  if (!input) {
+
+    return;
+
+  }
+
+
   input.type =
     input.type === "password"
+
       ? "text"
+
       : "password";
 
 }
@@ -218,6 +255,7 @@ async function loginUser() {
 
     message.textContent =
       result.message ||
+
       "Invalid User ID or Password.";
 
     message.className =
@@ -230,14 +268,21 @@ async function loginUser() {
 
   currentUserId =
     result.userId ||
+
     userId;
+
+
+  const rememberMe =
+    document.getElementById(
+      "rememberMe"
+    );
 
 
   if (
 
-    document.getElementById(
-      "rememberMe"
-    ).checked
+    rememberMe &&
+
+    rememberMe.checked
 
   ) {
 
@@ -280,7 +325,8 @@ async function loginUser() {
 
   document.getElementById(
     "message"
-  ).textContent = "";
+  ).textContent =
+    "";
 
 }
 
@@ -332,6 +378,25 @@ function logoutUser() {
     "message"
   ).textContent =
     "";
+
+}
+
+
+/* =========================================================
+   VEHICLE SEARCH ENTER KEY
+========================================================= */
+
+function handleVehicleSearchEnter(event) {
+
+  if (
+
+    event.key === "Enter"
+
+  ) {
+
+    searchVehicle();
+
+  }
 
 }
 
@@ -417,6 +482,7 @@ async function searchVehicle() {
 
     message.textContent =
       result.message ||
+
       "No spare key found.";
 
     message.className =
@@ -435,7 +501,9 @@ async function searchVehicle() {
 
 
   renderResults(
+
     result.results || []
+
   );
 
 }
@@ -470,6 +538,18 @@ function renderResults(data) {
         "result-card";
 
 
+      const safeItem =
+        JSON.stringify(item)
+
+          .replace(
+
+            /'/g,
+
+            "&#39;"
+
+          );
+
+
       card.innerHTML = `
 
         <h3>
@@ -495,21 +575,23 @@ function renderResults(data) {
 
           <button
             class="key-in-button"
-            onclick='openKeyActionModal(${JSON.stringify(item)}, "Key In")'
+            onclick='openKeyActionModal(${safeItem}, "Key In")'
           >
             Key In
           </button>
 
           <button
             class="key-out-button"
-            onclick='openKeyActionModal(${JSON.stringify(item)}, "Key Out")'
+            onclick='openKeyActionModal(${safeItem}, "Key Out")'
           >
             Key Out
           </button>
 
           <button
             class="logs-button"
-            onclick='viewSpareKeyLogs(${JSON.stringify(item.hookNumber)})'
+            onclick='viewSpareKeyLogs(${JSON.stringify(
+              item.hookNumber
+            )})'
           >
             View Logs
           </button>
@@ -520,7 +602,9 @@ function renderResults(data) {
 
 
       results.appendChild(
+
         card
+
       );
 
     }
@@ -535,8 +619,11 @@ function renderResults(data) {
 ========================================================= */
 
 function openKeyActionModal(
+
   item,
+
   action
+
 ) {
 
   currentKeyData =
@@ -558,6 +645,7 @@ function openKeyActionModal(
   ).textContent =
 
     "Vehicle: " +
+
     item.vehicleNumber;
 
 
@@ -637,8 +725,11 @@ async function confirmKeyAction() {
   if (!result.success) {
 
     alert(
+
       result.message ||
+
       "Unable to record action."
+
     );
 
     return;
@@ -650,8 +741,11 @@ async function confirmKeyAction() {
 
 
   alert(
+
     result.message ||
+
     "Action recorded successfully."
+
   );
 
 }
@@ -662,7 +756,9 @@ async function confirmKeyAction() {
 ========================================================= */
 
 async function viewSpareKeyLogs(
+
   hookNumber
+
 ) {
 
   const result =
@@ -682,8 +778,11 @@ async function viewSpareKeyLogs(
   if (!result.success) {
 
     alert(
+
       result.message ||
+
       "Unable to load logs."
+
     );
 
     return;
@@ -696,20 +795,28 @@ async function viewSpareKeyLogs(
 
 
   if (
+
     !result.logs ||
+
     result.logs.length === 0
+
   ) {
 
     html +=
+
       "<p>No logs found.</p>";
 
   } else {
 
     html +=
+
       '<div class="log-table-wrapper">';
 
+
     html +=
+
       '<table class="log-table">';
+
 
     html += `
 
@@ -747,9 +854,17 @@ async function viewSpareKeyLogs(
             </td>
 
             <td>
-              ${escapeHtml(log.vehicleNumber)}
+
+              ${escapeHtml(
+                log.vehicleNumber
+              )}
+
               <br>
-              ${escapeHtml(log.vehicleName)}
+
+              ${escapeHtml(
+                log.vehicleName
+              )}
+
             </td>
 
             <td>
@@ -770,6 +885,7 @@ async function viewSpareKeyLogs(
 
 
     html +=
+
       "</table></div>";
 
   }
@@ -827,7 +943,9 @@ function closeMissingKeyModal() {
 function handleMissingKeyEnter(event) {
 
   if (
+
     event.key === "Enter"
+
   ) {
 
     searchMissingKey();
@@ -893,6 +1011,7 @@ async function searchMissingKey() {
 
     message.textContent =
       result.message ||
+
       "No records found.";
 
     message.className =
@@ -904,12 +1023,16 @@ async function searchMissingKey() {
 
 
   if (
+
     !result.logs ||
+
     result.logs.length === 0
+
   ) {
 
     message.textContent =
       result.message ||
+
       "No records found.";
 
     message.className =
@@ -930,8 +1053,11 @@ async function searchMissingKey() {
   let html =
     '<div class="log-table-wrapper">';
 
+
   html +=
+
     '<table class="log-table">';
+
 
   html += `
 
@@ -961,23 +1087,33 @@ async function searchMissingKey() {
         <tr>
 
           <td>
-            ${escapeHtml(log.dateTime)}
+            ${escapeHtml(
+              log.dateTime
+            )}
           </td>
 
           <td>
-            ${escapeHtml(log.actionType)}
+            ${escapeHtml(
+              log.actionType
+            )}
           </td>
 
           <td>
-            ${escapeHtml(log.hookNumber)}
+            ${escapeHtml(
+              log.hookNumber
+            )}
           </td>
 
           <td>
-            ${escapeHtml(log.notes)}
+            ${escapeHtml(
+              log.notes
+            )}
           </td>
 
           <td>
-            ${escapeHtml(log.user)}
+            ${escapeHtml(
+              log.user
+            )}
           </td>
 
         </tr>
@@ -990,6 +1126,7 @@ async function searchMissingKey() {
 
 
   html +=
+
     "</table></div>";
 
 
@@ -1066,7 +1203,13 @@ async function submitUpdatePassword() {
     );
 
 
-  if (!currentPassword || !newPassword) {
+  if (
+
+    !currentPassword ||
+
+    !newPassword
+
+  ) {
 
     message.textContent =
       "Please complete all password fields.";
@@ -1077,7 +1220,9 @@ async function submitUpdatePassword() {
 
 
   if (
+
     newPassword.length < 6
+
   ) {
 
     message.textContent =
@@ -1111,6 +1256,7 @@ async function submitUpdatePassword() {
 
     message.textContent =
       result.message ||
+
       "Password update failed.";
 
     return;
@@ -1119,8 +1265,11 @@ async function submitUpdatePassword() {
 
 
   alert(
+
     result.message ||
+
     "Password updated successfully."
+
   );
 
 
@@ -1136,8 +1285,11 @@ async function submitUpdatePassword() {
 function escapeHtml(value) {
 
   if (
+
     value === null ||
+
     value === undefined
+
   ) {
 
     return "";
@@ -1148,28 +1300,43 @@ function escapeHtml(value) {
   return String(value)
 
     .replace(
+
       /&/g,
+
       "&amp;"
+
     )
 
     .replace(
+
       /</g,
+
       "&lt;"
+
     )
 
     .replace(
+
       />/g,
+
       "&gt;"
+
     )
 
     .replace(
+
       /"/g,
+
       "&quot;"
+
     )
 
     .replace(
+
       /'/g,
+
       "&#039;"
+
     );
 
 }
@@ -1187,7 +1354,9 @@ window.addEventListener(
 
     const modals =
       document.querySelectorAll(
+
         ".custom-modal"
+
       );
 
 
@@ -1196,7 +1365,9 @@ window.addEventListener(
       function (modal) {
 
         if (
+
           event.target === modal
+
         ) {
 
           modal.style.display =
@@ -1209,5 +1380,16 @@ window.addEventListener(
     );
 
   }
+
+);
+
+
+/* =========================================================
+   CONFIRM JAVASCRIPT LOADED
+========================================================= */
+
+console.log(
+
+  "Spare Key Search script loaded successfully."
 
 );
