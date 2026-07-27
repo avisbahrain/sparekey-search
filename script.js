@@ -1,5 +1,5 @@
 const GAS_API_URL =
-  "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+  "https://script.google.com/macros/s/AKfycbzECd2RMjqWMYmaXiq53FmS5lzDl0KOxx8uXd2h4nWQ5CHpbW1iV1-M71ewl-aHMBk4/exec";
 
 
 let currentUserId = "";
@@ -692,7 +692,6 @@ async function viewSpareKeyLogs(
 
 
   let html =
-
     "<h3>Spare Key Logs</h3>";
 
 
